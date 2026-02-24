@@ -1,0 +1,34 @@
+project_id = "lgisokrdfhdfngkxpsrq"
+
+[functions.admin-kyc-list]
+verify_jwt = false
+
+[functions.admin-kyc-stats]
+verify_jwt = false
+
+[functions.admin-payment-transactions]
+verify_jwt = false
+
+[functions.admin-users]
+verify_jwt = false
+
+[functions.kyc-create-record]
+verify_jwt = false
+
+[functions.kyc-get-documents]
+verify_jwt = false
+
+[functions.kyc-get-record]
+verify_jwt = false
+
+[functions.kyc-update-record]
+verify_jwt = false
+
+[functions.metamap-config]
+verify_jwt = false
+
+[functions.metamap-webhook]
+verify_jwt = false
+
+[functions.export-table-csv]
+verify_jwt = false
