@@ -8,7 +8,7 @@ type ApiRequestOptions = {
 
 const RAW_API_BASE_URL =
   (import.meta.env.VITE_API_BASE_URL as string | undefined) ??
-  "https://btc-gp.site/btc_backend";
+  "http://127.0.0.1:8000";
 const API_BASE_URL =
   import.meta.env.DEV && /^https?:\/\//i.test(RAW_API_BASE_URL) ? "" : RAW_API_BASE_URL;
 const ADMIN_TOKEN_KEY = "btc_admin_token";
