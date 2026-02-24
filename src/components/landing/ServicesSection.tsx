@@ -142,7 +142,7 @@ const ServicesSection = ({ onSelectService }: ServicesSectionProps) => {
                     if (!service.disabled) onSelectService(service.id);
                   }}
                 >
-                  {service.disabled ? "Temporary disabled" : service.id === "esim" ? "Buy Now" : "Get Started"}
+                  {service.id === "esim" ? "Buy Now" : "Get Started"}
                   <ArrowRight className="w-4 h-4 ml-1" />
                 </Button>
               </div>
