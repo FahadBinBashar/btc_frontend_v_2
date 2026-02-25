@@ -21,8 +21,8 @@ const services = [
     description: "Purchase and activate your digital SIM card instantly. No physical card needed.",
     features: ["Instant activation", "QR code delivery", "Compatible devices"],
     color: "from-[#00875A] to-[#006644]",
-    popular: false,
-    disabled: true,
+    popular: true,
+    disabled: false,
   },
   {
     id: "kyc",
@@ -41,8 +41,8 @@ const services = [
     description: "Register a new physical SIM card with full KYC verification.",
     features: ["Full registration", "Plan selection", "Delivery options"],
     color: "from-[#00B8A9] to-[#00875A]",
-    popular: false,
-    disabled: true,
+    popular: true,
+    disabled: false,
   },
   {
     id: "sim-swap",
@@ -51,8 +51,8 @@ const services = [
     description: "Transfer your existing number to a new SIM card securely.",
     features: ["Keep your number", "Quick process", "Identity verified"],
     color: "from-[#B4D335] to-[#8BC34A]",
-    popular: false,
-    disabled: true,
+    popular: true,
+    disabled: false,
   },
   {
     id: "smega",
@@ -61,8 +61,8 @@ const services = [
     description: "Register for BTC's mobile money wallet linked to your number.",
     features: ["Send & receive money", "Bill & airtime payments", "Merchant payments"],
     color: "from-[#00875A] to-[#00B8A9]",
-    popular: false,
-    disabled: true,
+    popular: true,
+    disabled: false,
   },
 ];
 
@@ -142,7 +142,7 @@ const ServicesSection = ({ onSelectService }: ServicesSectionProps) => {
                     if (!service.disabled) onSelectService(service.id);
                   }}
                 >
-                  {service.id === "esim" ? "Buy Now" : "Get Started"}
+                  {service.disabled ? "Temporary disabled" : service.id === "esim" ? "Buy Now" : "Get Started"}
                   <ArrowRight className="w-4 h-4 ml-1" />
                 </Button>
               </div>

@@ -154,4 +154,19 @@ export const api = {
   kycComplianceStatus: (requestId: string | number) => apiRequest(`/api/kyc-compliance/${requestId}/status`),
   kycComplianceComplete: (requestId: string | number, payload: { verified: boolean; kyc_verification_id?: number }) =>
     apiRequest(`/api/kyc-compliance/${requestId}/complete`, { method: "POST", body: payload }),
+  smegaStart: () => apiRequest<{ request_id?: string | number }>("/api/smega/start", { method: "POST", body: {} }),
+  smegaMsisdn: (requestId: string | number, msisdn: string) =>
+    apiRequest(`/api/smega/${requestId}/msisdn`, { method: "POST", body: { msisdn } }),
+  smegaInlineKycComplete: (requestId: string | number, payload: Record<string, unknown>) =>
+    apiRequest(`/api/smega/${requestId}/inline-kyc/complete`, { method: "POST", body: payload }),
+  smegaOtpSend: (requestId: string | number) =>
+    apiRequest(`/api/smega/${requestId}/otp/send`, { method: "POST", body: {} }),
+  smegaOtpVerify: (requestId: string | number, payload: { challenge_id: number | string; code: string }) =>
+    apiRequest(`/api/smega/${requestId}/otp/verify`, { method: "POST", body: payload }),
+  smegaComplete: (requestId: string | number, correlationId?: string) =>
+    apiRequest(`/api/smega/${requestId}/complete`, {
+      method: "POST",
+      body: {},
+      headers: correlationId ? { "x-correlation-id": correlationId } : undefined,
+    }),
 };

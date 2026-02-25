@@ -6,11 +6,13 @@ import Footer from "@/components/landing/Footer";
 import ESIMPurchaseFlow from "@/components/esim/ESIMPurchaseFlow";
 import SIMSwapFlow from "@/components/simswap/SIMSwapFlow";
 import KYCComplianceFlow from "@/components/kyc/KYCComplianceFlow";
+import SmegaFlow from "@/components/smega/SmegaFlow";
 
 const Index = () => {
   const [showESIMFlow, setShowESIMFlow] = useState(false);
   const [showSIMSwapFlow, setShowSIMSwapFlow] = useState(false);
   const [showKYCFlow, setShowKYCFlow] = useState(false);
+  const [showSmegaFlow, setShowSmegaFlow] = useState(false);
 
   const handleSelectService = (service: string) => {
     if (service === "esim") {
@@ -19,6 +21,8 @@ const Index = () => {
       setShowSIMSwapFlow(true);
     } else if (service === "kyc") {
       setShowKYCFlow(true);
+    } else if (service === "smega") {
+      setShowSmegaFlow(true);
     }
     // Other services can be implemented later
   };
@@ -33,6 +37,10 @@ const Index = () => {
 
   if (showKYCFlow) {
     return <KYCComplianceFlow onClose={() => setShowKYCFlow(false)} />;
+  }
+
+  if (showSmegaFlow) {
+    return <SmegaFlow onClose={() => setShowSmegaFlow(false)} />;
   }
 
   return (
