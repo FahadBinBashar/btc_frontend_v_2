@@ -9,10 +9,10 @@ export default defineConfig(({ mode }) => {
   const proxyTarget =
     env.VITE_API_PROXY_TARGET ||
     env.VITE_API_BASE_URL ||
-    "https://btc-gp.site/btc_backend";
+    "http://10.6.1.202/btc_backend_v_2/public";
 
   return {
-    base: "/",
+    base: "/btc_fr_v2/",
     server: {
       host: "::",
       port: 8080,

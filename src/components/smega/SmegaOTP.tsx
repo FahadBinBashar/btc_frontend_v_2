@@ -14,6 +14,7 @@ interface SmegaOTPProps {
   onVerified: () => void;
   onBack: () => void;
   onChallengeUpdate: (challengeId: string | number | null, debugCode?: string | number | null) => void;
+  onNeedsAction?: () => void;
 }
 
 const SmegaOTP = ({
@@ -24,6 +25,7 @@ const SmegaOTP = ({
   onVerified,
   onBack,
   onChallengeUpdate,
+  onNeedsAction,
 }: SmegaOTPProps) => {
   const [otp, setOtp] = useState("");
   const [isVerifying, setIsVerifying] = useState(false);
@@ -69,6 +71,7 @@ const SmegaOTP = ({
       onVerified();
     } catch (err) {
       console.error("OTP verify failed:", err);
+      onNeedsAction?.();
       toast.error("Invalid OTP. Please try again.");
     } finally {
       setIsVerifying(false);

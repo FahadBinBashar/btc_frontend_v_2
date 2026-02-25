@@ -10,6 +10,7 @@ import SmegaOTP from "./SmegaOTP";
 import SmegaComplete from "./SmegaComplete";
 
 type Step = "number" | "inlineKyc" | "otp" | "complete";
+type FrontendState = "pending" | "needs_action" | "verified" | "failed";
 
 interface SmegaFlowProps {
   onClose: () => void;
@@ -29,6 +30,8 @@ const SmegaFlow = ({ onClose }: SmegaFlowProps) => {
   const [challengeId, setChallengeId] = useState<string | number | null>(null);
   const [debugCode, setDebugCode] = useState<string | number | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [flowState, setFlowState] = useState<FrontendState>("pending");
+  const [completeResult, setCompleteResult] = useState<any>(null);
 
   const currentStepIndex = steps.findIndex((s) => s.id === currentStep);
 
@@ -50,6 +53,7 @@ const SmegaFlow = ({ onClose }: SmegaFlowProps) => {
       send?.debug_code ?? send?.debugCode ?? send?.data?.debug_code ?? send?.data?.debugCode ?? null;
     setChallengeId(newChallengeId);
     setDebugCode(newDebugCode);
+    setFlowState("pending");
     setCurrentStep("otp");
   };
 
@@ -86,10 +90,12 @@ const SmegaFlow = ({ onClose }: SmegaFlowProps) => {
       if (isCompliant) {
         await sendOtp(id);
       } else {
+        setFlowState("needs_action");
         setCurrentStep("inlineKyc");
       }
     } catch (err) {
       console.error("Failed to start SMEGA registration:", err);
+      setFlowState("failed");
       toast.error("Failed to start SMEGA registration");
     } finally {
       setIsSubmitting(false);
@@ -104,6 +110,7 @@ const SmegaFlow = ({ onClose }: SmegaFlowProps) => {
       await sendOtp(requestId);
     } catch (err) {
       console.error("Failed to proceed with SMEGA KYC:", err);
+      setFlowState("needs_action");
       toast.error("Failed to continue SMEGA registration");
     } finally {
       setIsSubmitting(false);
@@ -115,10 +122,13 @@ const SmegaFlow = ({ onClose }: SmegaFlowProps) => {
     setIsSubmitting(true);
     try {
       const correlationId = `smega-${Date.now()}`;
-      await api.smegaComplete(requestId, correlationId);
+      const complete = await api.smegaComplete(requestId, correlationId);
+      setCompleteResult(complete);
+      setFlowState("verified");
       setCurrentStep("complete");
     } catch (err) {
       console.error("Failed to complete SMEGA registration:", err);
+      setFlowState("failed");
       toast.error("Failed to complete SMEGA registration");
     } finally {
       setIsSubmitting(false);
@@ -154,7 +164,8 @@ const SmegaFlow = ({ onClose }: SmegaFlowProps) => {
             SMEGA Registration
           </h1>
           <p className="text-muted-foreground">
-            Register for BTC's mobile money wallet linked to your number
+            Register for BTC's mobile money wallet linked to your number. State:{" "}
+            <span className="font-medium text-foreground">{flowState}</span>
           </p>
         </div>
 
@@ -228,10 +239,11 @@ const SmegaFlow = ({ onClose }: SmegaFlowProps) => {
                 setChallengeId(id);
                 setDebugCode(code ?? null);
               }}
+              onNeedsAction={() => setFlowState("needs_action")}
             />
           )}
           {currentStep === "complete" && (
-            <SmegaComplete key="complete" phoneNumber={phoneNumber} onComplete={onClose} />
+            <SmegaComplete key="complete" phoneNumber={phoneNumber} flowState={flowState} result={completeResult} onComplete={onClose} />
           )}
         </AnimatePresence>
       </div>

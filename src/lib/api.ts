@@ -8,7 +8,7 @@ type ApiRequestOptions = {
 
 const RAW_API_BASE_URL =
   (import.meta.env.VITE_API_BASE_URL as string | undefined) ??
-  "http://127.0.0.1:8000";
+  "http://10.6.1.202/btc_backend_v_2/public";
 const API_BASE_URL =
   import.meta.env.DEV && /^https?:\/\//i.test(RAW_API_BASE_URL) ? "" : RAW_API_BASE_URL;
 const ADMIN_TOKEN_KEY = "btc_admin_token";
@@ -154,6 +154,24 @@ export const api = {
   kycComplianceStatus: (requestId: string | number) => apiRequest(`/api/kyc-compliance/${requestId}/status`),
   kycComplianceComplete: (requestId: string | number, payload: { verified: boolean; kyc_verification_id?: number }) =>
     apiRequest(`/api/kyc-compliance/${requestId}/complete`, { method: "POST", body: payload }),
+  kycJourneyStart: (payload: { smega_selected: boolean; source_of_income: string }) =>
+    apiRequest<{ request_id?: string | number }>("/api/kyc/start", { method: "POST", body: payload }),
+  kycJourneyMsisdn: (
+    requestId: string | number,
+    payload: { terms_accepted: boolean; msisdn: string; smega_selected: boolean; source_of_income: string }
+  ) => apiRequest(`/api/kyc/${requestId}/msisdn`, { method: "POST", body: payload }),
+  kycJourneyOtpSend: (requestId: string | number) =>
+    apiRequest(`/api/kyc/${requestId}/otp/send`, { method: "POST", body: {} }),
+  kycJourneyOtpVerify: (requestId: string | number, payload: { challenge_id: number | string; code: string }) =>
+    apiRequest(`/api/kyc/${requestId}/otp/verify`, { method: "POST", body: payload }),
+  kycJourneyProfile: (requestId: string | number, payload: Record<string, unknown>) =>
+    apiRequest(`/api/kyc/${requestId}/profile`, { method: "POST", body: payload }),
+  kycJourneyMetamapGate: (
+    requestId: string | number,
+    payload: { verified: boolean; session_id: string; verification_id: string }
+  ) => apiRequest(`/api/kyc/${requestId}/metamap/gate`, { method: "POST", body: payload }),
+  kycJourneyComplete: (requestId: string | number, payload: { apply_rating_status: boolean }) =>
+    apiRequest(`/api/kyc/${requestId}/complete`, { method: "POST", body: payload }),
   smegaStart: () => apiRequest<{ request_id?: string | number }>("/api/smega/start", { method: "POST", body: {} }),
   smegaMsisdn: (requestId: string | number, msisdn: string) =>
     apiRequest(`/api/smega/${requestId}/msisdn`, { method: "POST", body: { msisdn } }),

@@ -4,10 +4,12 @@ import { Button } from "@/components/ui/button";
 
 interface SmegaCompleteProps {
   phoneNumber: string;
+  flowState?: "pending" | "needs_action" | "verified" | "failed";
+  result?: any;
   onComplete: () => void;
 }
 
-const SmegaComplete = ({ phoneNumber, onComplete }: SmegaCompleteProps) => {
+const SmegaComplete = ({ phoneNumber, flowState = "verified", result, onComplete }: SmegaCompleteProps) => {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -24,6 +26,11 @@ const SmegaComplete = ({ phoneNumber, onComplete }: SmegaCompleteProps) => {
           Your SMEGA wallet has been linked to
           <span className="font-mono font-semibold text-foreground"> +267 {phoneNumber}</span>.
         </p>
+
+        <div className="bg-muted/50 rounded-lg p-4 text-left mb-6">
+          <p className="text-sm"><span className="text-muted-foreground">frontend_state:</span> {flowState}</p>
+          <p className="text-sm"><span className="text-muted-foreground">status:</span> {String(result?.status ?? result?.data?.status ?? "success")}</p>
+        </div>
 
         <div className="bg-muted/50 rounded-lg p-5 text-left mb-6">
           <h3 className="font-semibold text-foreground mb-2">Next steps</h3>
